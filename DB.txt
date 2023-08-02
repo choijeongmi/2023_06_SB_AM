@@ -10,6 +10,23 @@ CREATE TABLE article(
     `body` TEXT NOT NULL
 );
 
+CREATE TABLE `member`(
+    id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    regDate DATETIME NOT NULL,
+    updateDate DATETIME NOT NULL,
+    loginId VARCHAR(20) NOT NULL UNIQUE,
+    loginPw VARCHAR(100) NOT NULL, 
+    `authLevel` TINYINT UNSIGNED NOT NULL DEFAULT 1 COMMENT '권한 레벨 (일반 = 1, 관리자 = 3)',
+    `name` VARCHAR(20) NOT NULL,
+    nickname VARCHAR(20) NOT NULL,
+    cellphoneNum VARCHAR(20) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    delStatus TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴여부 (탈퇴 전 = 0, 탈퇴 후 = 1)',
+    delDate DATETIME COMMENT '탈퇴날짜'
+);
+
+ALTER TABLE article ADD COLUMN memberId INT UNSIGNED NOT NULL AFTER updateDate;
+
 INSERT INTO article
 SET regDate = NOW(),
 updateDate = NOW(),
@@ -34,4 +51,31 @@ updateDate = NOW(),
 title = '체체',
 `body` = '체체';
 
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'test1',
+loginPw = 'test1',
+`name` = 'test1',
+nickname = 'test1',
+cellphoneNum = '01011112222',
+email = 'test1@gmail.com';
+
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'admin',
+loginPw = 'admin',
+authLevel = 3,
+`name` = 'admin',
+nickname = 'admin',
+cellphoneNum = '01022223333',
+email = 'admin@gmail.com';
+
+
+
 SELECT * FROM article;
+
+SELECT * FROM `member`;
+
+TRUNCATE `member`;
