@@ -6,34 +6,61 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dao.MemberDao;
 import com.example.demo.vo.Member;
 
-
-
 @Service
 public class MemberService {
-	
+
 	private MemberDao memberDao;
-	
+
 	@Autowired
-	MemberService(MemberDao memberDao){
+	MemberService(MemberDao memberDao) {
 		this.memberDao = memberDao;
 	}
 
-	public void doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum,
-			String email) { 
-		memberDao.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
-	}
-	
+	public int doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
 
-	public Member getMemberById(int id) { 
+		Member existsMember = getMemberByLoginId(loginId);
+		
+		if(existsMember != null) {
+			return -1;
+		}
+		 existsMember = getMemberByNickname(nickname);
+		
+		if(existsMember != null) {
+			return -2;
+		}
+		existsMember = getMemberByNameAndEmaill(name, email);
+		
+		if(existsMember != null) {
+			return -3;
+		}
+
+		memberDao.doJoin(loginId, loginPw, name, nickname, cellphoneNum, email);
+		return getLastInsertId();
+	}
+
+	private Member getMemberByNameAndEmaill(String name, String email) {
+		
+		return memberDao.getMemberByNameAndEmaill(name, email);
+	}
+
+	private Member getMemberByLoginId(String loginId) {
+
+		return memberDao.getMemberByLoginId(loginId);
+	} 
+	private Member getMemberByNickname(String nickname) {
+		
+		return memberDao.getMemberByNickname(nickname);
+	}
+
+	public Member getMemberById(int id) {
 		return memberDao.getMemberById(id);
 	}
 
 	public int getLastInsertId() {
-		
+
 		return memberDao.getLastInsertId();
 	}
-	
+
 	// 서비스 메서드
 
-	
 }
