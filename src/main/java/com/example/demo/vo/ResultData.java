@@ -22,5 +22,13 @@ public class ResultData {
 		
 		return rd;
 	}
+	
+	public boolean isSucess() {
+		return this.resultCode.startsWith("S-");
+	}
+	
+	public boolean isFail() {
+		return isSucess() == false;
+	}
 
 }
